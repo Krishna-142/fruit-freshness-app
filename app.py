@@ -11,18 +11,23 @@ from io import BytesIO
 
 import requests
 
+import requests
+
 def download_model():
-    url = "https://drive.google.com/uc?id=16Q_GSLrxlGTtKWjb67cjNkeZpdi2dV4j"
-    response = requests.get(url)
+    url = "https://drive.google.com/uc?export=download&id=16Q_GSLrxlGTtKWjb67cjNkeZpdi2dV4j"
+    
+    response = requests.get(url, stream=True)
     
     with open("fruit_model.pth", "wb") as f:
-        f.write(response.content)
+        for chunk in response.iter_content(chunk_size=8192):
+            if chunk:
+                f.write(chunk)
 import os
 
-if not os.path.exists("fruit_model.pth"):
+if not os.path.exists("fruit_model.pth") or os.path.getsize("fruit_model.pth") < 1000000:
     download_model()
 
-    
+
 class Model(nn.Module):
     def __init__(self):
         super().__init__()
