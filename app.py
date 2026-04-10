@@ -9,6 +9,20 @@ from io import BytesIO
 
 # ------------------ MODEL CLASS ------------------
 
+import requests
+
+def download_model():
+    url = "https://drive.google.com/uc?id=16Q_GSLrxlGTtKWjb67cjNkeZpdi2dV4j"
+    response = requests.get(url)
+    
+    with open("fruit_model.pth", "wb") as f:
+        f.write(response.content)
+import os
+
+if not os.path.exists("fruit_model.pth"):
+    download_model()
+
+    
 class Model(nn.Module):
     def __init__(self):
         super().__init__()
